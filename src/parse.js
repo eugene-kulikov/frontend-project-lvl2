@@ -8,7 +8,7 @@ const parsers = (content, type) => {
     case 'yaml':
       return load(content);
     default:
-      throw new Error('Undefined format type');
+      throw new Error('Unknown format type');
   }
 };
 

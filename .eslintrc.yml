@@ -18,4 +18,4 @@ rules:
     - ignorePackages
     - js: always
   no-plusplus: ["error", { "allowForLoopAfterthoughts": true }]
-  no-underscore-dangle: [2, { "allow": ["__dirname"] }]
+  no-underscore-dangle: [2, { "allow": ["__dirname", "__filename"] }]

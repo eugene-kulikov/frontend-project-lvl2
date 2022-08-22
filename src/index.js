@@ -1,36 +1,16 @@
-import _ from 'lodash';
 import { readFileSync } from 'fs';
 import { resolve, extname } from 'path';
-import { cwd } from 'node:process';
 import parse from './parse.js';
+import buildTree from './buildTree.js';
+import getOutputFormat from './formatters/index.js';
 
-export default function gendiff(filepath1, filepath2) {
-  const typeFile1 = extname(filepath1).substring(1);
-  const typeFile2 = extname(filepath2).substring(1);
+const getFormat = (filepath) => extname(filepath).substring(1);
+const getPath = (filepath) => resolve(process.cwd(), filepath);
+const readFile = (filepath) => readFileSync(getPath(filepath));
 
-  const data1 = parse(readFileSync(resolve(cwd(), filepath1)), typeFile1);
-  const data2 = parse(readFileSync(resolve(cwd(), filepath2)), typeFile2);
-
-  const arr1 = [];
-  const arr2 = [];
-
-  _.forIn(data1, (value, key) => {
-    arr1.push(`${key}:${value}`);
-  });
-  _.forIn(data2, (value, key) => {
-    arr2.push(`${key}:${value}`);
-  });
-
-  const commonArr = [...new Set([...arr1, ...arr2])].sort();
-
-  const result = commonArr.map((item) => {
-    if (arr1.includes(item) && arr2.includes(item)) {
-      return `  ${item}`;
-    }
-    if (arr1.includes(item)) {
-      return `- ${item}`;
-    }
-    return `+ ${item}`;
-  });
-  return result.join('\n');
+export default function genDiff(filepath1, filepath2, formatName = 'stylish') {
+  const data1 = parse(readFile(filepath1), getFormat(filepath1));
+  const data2 = parse(readFile(filepath2), getFormat(filepath2));
+  const diffInfo = buildTree(data1, data2);
+  return getOutputFormat(diffInfo, formatName);
 }
