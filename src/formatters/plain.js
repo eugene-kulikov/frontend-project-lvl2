@@ -23,7 +23,7 @@ const getPlain = (tree) => {
       case 'nested':
         return `${generatePlain(node.value, [path]).join('\n')}`;
       default:
-        throw new Error(`Type: ${node.state} is undefined`);
+        throw new Error(`State: ${node.state} is unknown`);
     }
   });
 
