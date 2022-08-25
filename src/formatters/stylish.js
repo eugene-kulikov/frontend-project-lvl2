@@ -19,9 +19,9 @@ const sign = {
   unchanged: ' ',
 };
 
-const getStylish = (root) => {
+const getStylish = (tree) => {
   const replacer = '    ';
-  const iter = (tree, depth) => tree.map((node) => {
+  const generateStylish = (branch, depth) => branch.map((node) => {
     const indent = replacer.repeat(depth);
     const indentForSign = indent.slice(2);
 
@@ -37,13 +37,13 @@ const getStylish = (root) => {
       case 'changed':
         return [`${makeLine(node.value1, sign.deleted)}`, `${makeLine(node.value2, sign.added)}`].join('\n');
       case 'nested':
-        return `${indent}${node.key}: ${['{', ...iter(node.value, depth + 1), `${indent}}`].join('\n')}`;
+        return `${indent}${node.key}: ${['{', ...generateStylish(node.value, depth + 1), `${indent}}`].join('\n')}`;
       default:
         throw new Error(`Unknown type: ${node.state}`);
     }
   });
 
-  const stylish = iter(root, 1);
+  const stylish = generateStylish(tree, 1);
   return ['{', ...stylish, '}'].join('\n');
 };
 

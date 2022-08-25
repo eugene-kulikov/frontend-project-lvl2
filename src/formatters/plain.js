@@ -7,8 +7,8 @@ const stringify = (value) => {
   return _.isString(value) ? `'${value}'` : value;
 };
 
-const getPlain = (root) => {
-  const iter = (tree, parent) => tree.flatMap((node) => {
+const getPlain = (tree) => {
+  const generatePlain = (branch, parent) => branch.flatMap((node) => {
     const path = [...parent, node.key].join('.');
 
     switch (node.state) {
@@ -21,13 +21,13 @@ const getPlain = (root) => {
       case 'changed':
         return `Property '${path}' was updated. From ${stringify(node.value1)} to ${stringify(node.value2)}`;
       case 'nested':
-        return `${iter(node.value, [path]).join('\n')}`;
+        return `${generatePlain(node.value, [path]).join('\n')}`;
       default:
         throw new Error(`Type: ${node.state} is undefined`);
     }
   });
 
-  const plain = iter(root, []);
+  const plain = generatePlain(tree, []);
   return [...plain].join('\n');
 };
 
