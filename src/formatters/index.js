@@ -11,6 +11,6 @@ export default function getOutputFormat(tree, format) {
     case 'json':
       return getJson(tree);
     default:
-      throw new Error('Unknown format!');
+      throw new Error(`Unknown format: ${format}`);
   }
 }
