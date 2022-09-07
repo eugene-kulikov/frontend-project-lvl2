@@ -9,6 +9,7 @@ const __dirname = dirname(__filename);
 const getFixturePath = (filename) => resolve(__dirname, '..', '__fixtures__', filename);
 const extensions = ['json', 'yml', 'yaml'];
 
+/* eslint-disable */
 let expectedStylishResult;
 let expectedPlainResult;
 let expectedJsonResult;
@@ -18,6 +19,7 @@ beforeAll(async () => {
   expectedPlainResult = await readFile(getFixturePath('plainResult.txt'), 'utf-8');
   expectedJsonResult = await readFile(getFixturePath('jsonResult.txt'), 'utf-8');
 });
+/* eslint-enable */
 
 describe('File comparison', () => {
   test.each(extensions)('Check input format %s', async (extension) => {
