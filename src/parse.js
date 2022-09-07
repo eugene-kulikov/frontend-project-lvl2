@@ -8,7 +8,7 @@ const parsers = (content, type) => {
     case 'yaml':
       return load(content);
     default:
-      throw new Error(`Unknown type: ${type}`);
+      throw new Error(`Unknown extension: ${type}`);
   }
 };
 
