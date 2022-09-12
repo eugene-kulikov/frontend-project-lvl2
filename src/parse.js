@@ -1,15 +1,17 @@
 import { load } from 'js-yaml';
 
-const parsers = (content, type) => {
-  switch (type) {
-    case 'json':
-      return JSON.parse(content);
-    case 'yml':
-    case 'yaml':
-      return load(content);
-    default:
-      throw new Error(`Unknown extension: ${type}`);
+const mapping = {
+  yml: (content) => load(content),
+  yaml: (content) => load(content),
+  json: (content) => JSON.parse(content),
+};
+
+const parse = (content, type) => {
+  try {
+    return mapping[type](content);
+  } catch (e) {
+    throw new Error(`Unknown extension: ${type}`);
   }
 };
 
-export default parsers;
+export default parse;
